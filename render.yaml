@@ -1,1 +1,27 @@
 
+services:
+  - type: web
+    name: fleet-masters
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fleet-masters-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATABASE_SSL
+        value: "false"
+
+databases:
+  - name: fleet-masters-db
+    plan: basic-256mb
+    databaseName: fleet_masters
+    user: fleet_masters
+
